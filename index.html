@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <title>Live File Changes</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial;}
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      /* #messages li:nth-child(even) { background: gray; } */
+      #messages li {font-size : 24px;}
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script>
+        $(function () {
+          var socket = io.connect('http://localhost:5000', {reconnection: false});
+          console.log("Client Socket Connected");
+          socket.on('file changed', (updatedFile)=>{
+            // console.log(updatedFile);
+            var date = new Date().toString().slice(16, 24);
+      
+            for(var i=0;i<updatedFile.length;i++){
+              var render = `${date.toString()}: ${updatedFile[i]}`; 
+              console.log(render);
+              $('#messages').append($('<li>').text(render));
+            }
+          }); 
+        });
+        // $(window).on('beforeunload', function(){
+        //   socket.close();
+        // });
+      </script>
+  </body>
+</html>
